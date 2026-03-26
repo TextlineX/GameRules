@@ -2,6 +2,10 @@ name: Compile and Release Rulesets
 
 on:
   push:
+    branches:
+      - main
+    paths:
+      - 'src/ku-mc.json'
     tags:
       - 'v*'
   workflow_dispatch:
@@ -31,13 +35,14 @@ jobs:
       - name: Compile JSON to SRS
         run: |
           mkdir -p dist
-          for file in src/*.json; do
-            filename=$(basename "$file" .json)
-            echo "Compiling $file..."
-            sing-box rule-set compile "$file" -o "dist/${filename}.srs"
-          done
+          file="src/ku-mc.json"
+          filename=$(basename "$file" .json)
+          echo "Compiling $file..."
+          sing-box rule-set compile "$file" -o "dist/${filename}.srs"
+          cp "$file" "dist/${filename}.json"
 
-      - name: Create Release
+      - name: Create Release (version tags)
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*.srs
@@ -46,3 +51,22 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create/Update Release (nightly)
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: nightly
+          name: nightly
+          files: dist/*.srs
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to gh-pages
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
