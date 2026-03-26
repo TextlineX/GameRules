@@ -1,45 +1,28 @@
-# Gaming-Direct Sing-box Rules
+# Gaming-Direct Sing-box Rules (Release Based)
 
-这是一个专为 `sing-box` 设计的游戏规则集仓库。支持 JSON 源码自动编译为二进制（SRS）格式，方便通过 CDN 稳定引用。
-
-## 目录结构
-
-- `/src/`: 存放所有的 `.json` 源码，方便 AI 修改内容。
-- `/dist/`: 由 GitHub Actions 自动生成的 `.srs` 二进制文件，供 `sing-box` 客户端直接下载。
+这是一个基于 **GitHub Release** 的游戏规则集仓库。支持从 JSON 自动编译为二进制（SRS）并作为发布附件（Assets）托管。
 
 ## 如何在 Sing-box 中引用
 
-在你的主配置文件（`config.json`）的 `rule_set` 中添加以下内容：
+由于我们使用 Release 进行托管，引用链接将始终指向最新版本的二进制文件：
 
 ```json
 {
   "tag": "Gaming-Direct",
   "type": "remote",
   "format": "binary",
-  "url": "https://fastly.jsdelivr.net/gh/你的用户名/仓库名@main/dist/Gaming-Direct.srs",
+  "url": "https://github.com/TextlineX/GameRules/releases/latest/download/Gaming-Direct.srs",
   "download_detour": "🚀 自动选择"
 }
 ```
 
-并在 `route.rules` 中将其优先级设为最高（放在最前面）：
+## 如何触发发布一个新的 Release
 
-```json
-{
-  "rules": [
-    {
-      "rule_set": "Gaming-Direct",
-      "outbound": "direct"
-    }
-  ]
-}
-```
+当你修改了 `src/` 下的内容后，通过以下 Git 指令发布新版本：
 
-## 包含内容
+1.  `git add .`
+2.  `git commit -m "feat: update game rules"`
+3.  `git tag v1.0.1` (版本号根据你的情况递增)
+4.  `git push origin main --tags`
 
-目前已整合：
-- **Kuro Game (鸣潮/战双)**: 包括 `aki-game.com` 系列域名及相关 IP 段。
-- **Mihoyo (原神/铁道/绝区零)**: 基础域名后缀支持。
-
-## 自动更新
-
-每当你修改并推送 `src/` 下的 JSON 文件时，GitHub Actions 会自动重新编译生成对应的 `.srs` 文件并更新 `dist/` 目录。
+推送 **Tag** 后，GitHub 会自动创建一个包含编译好的 `.srs` 文件的 Release。
