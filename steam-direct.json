@@ -3,24 +3,10 @@
   "rules": [
     {
       "domain_suffix": [
-        "steamcontent.com",
+        "steamcdn-a.akamaihd.net",
         "cm.steampowered.com",
-        "csgo.wmsj.cn",
-        "dl.steam.clngaa.com",
-        "dl.steam.ksyna.com",
-        "dota2.wmsj.cn",
-        "example-example.com",
-        "example-example2.com",
-        "st.dl.bscstorage.net",
-        "st.dl.eccdnx.com",
-        "st.dl.pinyuncloud.com",
-        "steamchina.com",
-        "steampipe.steamcontent.tnkjmec.com",
-        "steampowered.com.8686c.com",
-        "steamstatic.com.8686c.com",
-        "steamusercontent.com",
-        "wmsjsteam.com",
-        "xz.pphimalayanrt.com"
+        "steamserver.net",
+        "steamcontent.com"
       ]
     }
   ]
